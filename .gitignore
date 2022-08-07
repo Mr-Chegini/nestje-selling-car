@@ -1,11 +1,9 @@
 # compiled output
 /dist
 /node_modules
-package-lock.json
-db.sqlite
-db.sqlite3
-test.sqlite3
-
+/yarn.lock
+/package-lock.json
+/public
 #environment
 .env.development
 .env.test
