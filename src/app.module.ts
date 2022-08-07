@@ -5,12 +5,12 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { ReportsModule } from './reports/reports.module';
-import { User } from './users/user.entity';
-import { Report } from './reports/reports.entity';
+import configuration from './config/configuration';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
+      load: [configuration],
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV}`,
     }),
@@ -18,10 +18,14 @@ import { Report } from './reports/reports.entity';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
         return {
-          type: 'sqlite',
+          type: 'postgres',
+          host: config.get<string>('DB_HOST'),
+          port: config.get<number>('DB_PORT'),
+          username: config.get<string>('DB_USERNAME'),
+          password: config.get<string>('DB_PASSWORD'),
           database: config.get<string>('DB_NAME'),
-          entities: [User, Report],
           synchronize: true,
+          autoLoadEntities: true,
         };
       },
     }),
